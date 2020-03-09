@@ -27,7 +27,7 @@ const serverListener = (req, res) => {
 	let urlsp = url.split('/');
 	let query = parse(urlc.split('?')[1]);
 
-	if (urlsp[1] === 'setIP') {
+	if (urlsp[1] === 'setip') {
 		if (urlsp[2] !== authToken){
 			res.writeHead(403, 'Authorization failed: Invalid token');
 			res.end();
@@ -51,6 +51,8 @@ const serverListener = (req, res) => {
 		}
 
 		service['ip'] = query["ip"];
+		res.writeHead(200, {'content-type': 'text/plain'});
+		res.end('Succesfully set ip to ' + query["ip"]);
 	} else if (urlsp.length > 1) {
 		var service = services[urlsp[1]];
 		if (service === undefined) {
@@ -58,7 +60,37 @@ const serverListener = (req, res) => {
 			res.end()
 			return;
 		}
+		var fURL = urlsp.slice(2);
+		var options = {
+			hostname: service['ip'],
+			port: 80,
+			path: fURL,
+			method: req.method,
+			headers: req.headers
+		};
+
+		var proxy = http.request(options, (pres) => {
+			res.writeHead(pres.statusCode, pres.headers);
+			pres.pipe(res, {
+				end: true
+			});
+		});
+		req.pipe(proxy, {
+			end:true
+		});
 	}
 }
+
+var server = http.createServer(serverListener);
+
+server.on('close', () => {
+	fs.writeFileSync('services.json', JSON.stringify(services));
+});
+
+process.on('SIGINT', function() {
+  server.close();
+});
+
+server.listen(80);
 
 console.log(authToken);
