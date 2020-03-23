@@ -11,6 +11,7 @@ const makeid = (length) => { // Dirtily place funtions in server.js
    }
    return result;
 };
+
 const isIP = (ipaddress) => {  // Dirty oncemore ^
   if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
     return true;  
@@ -38,19 +39,13 @@ const serverListener = (req, res) => {
 			res.end();
 			return;
 		}
-		if (query["service"] === undefined) {
-			res.writeHead(400, 'Missing service');
-			res.end();
-			return;
-		}
-		var service = services[query["service"]];
-		if (service === undefined) {
+		if (services === undefined) {
 			res.writeHead(400, 'Inexistant service');
 			res.end();
 			return;
 		}
 
-		service['ip'] = query["ip"];
+		services['ip'] = query["ip"];
 		res.writeHead(200, {'content-type': 'text/plain'});
 		res.end('Succesfully set ip to ' + query["ip"]);
 	} else if (urlsp.length > 1) {
@@ -62,7 +57,7 @@ const serverListener = (req, res) => {
 		}
 		var fURL = urlsp.slice(2);
 		var options = {
-			hostname: service['ip'],
+			hostname: services['ip'],
 			port: 80,
 			path: fURL,
 			method: req.method,
