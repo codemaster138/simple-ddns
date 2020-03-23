@@ -73,8 +73,9 @@ const serverListener = (req, res) => {
 
 		proxy.on('error', () => {
 			console.log("error");
-		})
-		req.pipe(proxy, {
+		});
+
+		res.pipe(proxy, {
 			end:true
 		});
 	}
