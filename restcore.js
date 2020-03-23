@@ -48,7 +48,9 @@ const C = {
             if (query) {
                 if (self.API[iurl] && self.API[iurl].get) {
                     self.API[iurl]["get"](query, res, req);
-                } else {
+                } else if (self.API['/']["get"]) {
+                    self.API['/']["get"](query, res, req);
+                }else {
                     self.debug("Wrong API path: ", iurl);
                     res.writeHead(400, { 'content-type': 'application/json' });
                     res.end(`{"status": 400, "causes": ["missing/incorrect API path: get"]}`);
