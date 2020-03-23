@@ -49,7 +49,6 @@ const serverListener = (req, res) => {
 		res.writeHead(200, {'content-type': 'text/plain'});
 		res.end('Succesfully set ip to ' + query["ip"]);
 	} else if (urlsp.length > 1) {
-		var fURL = urlsp.slice(2);
 		var options = {
 			hostname: services['ip'],
 			port: 80,
