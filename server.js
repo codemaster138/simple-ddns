@@ -40,3 +40,7 @@ core.addAPI('/', 'get', (query, res, req) => {
 		});
 	});
 });
+
+core.addAPI('/', 'put', (query, res, req) => {
+	res.end();
+})
