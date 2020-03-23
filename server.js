@@ -96,6 +96,6 @@ process.on('SIGINT', function() {
   server.close();
 });
 
-server.listen(80);
+server.listen(process.env.PORT);
 
 console.log(authToken);
