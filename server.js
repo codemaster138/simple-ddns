@@ -1,5 +1,6 @@
 const core = require('./restcore');
 const http = require('http');
+const fs = require('fs');
 const makeid = (length) => { // Dirtily place funtions in server.js
    var result           = '';
    var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -41,6 +42,15 @@ core.addAPI('/', 'get', (query, res, req) => {
 	});
 });
 
-core.addAPI('/', 'put', (query, res, req) => {
-	res.end();
+core.addAPI('/ip', 'post', (query, res, req) => {
+	console.log('received post');
+	if (!query.ip || !isIP(query.ip)) {
+		res.writeHead(400, { 'content-type': 'application/json' });
+		res.end(`{"status": 400, "causes": ["Not an IP"]}`);
+		return;
+	}
+	services.ip = query.ip;
+	res.writeHead(200, { 'content-type': 'application/json' });
+	res.end(`{"status": 200}`);
+	console.log('IP is now ' + query.ip);
 })

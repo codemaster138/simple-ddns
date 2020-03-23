@@ -104,30 +104,6 @@ const C = {
                 res.end(`{"status": 400, "causes": ["missing query"]}`);
             }
         }
-
-        if (req.method.toUpperCase() === 'PUT') {
-            var body = "";
-            req.on('data', chunk => {
-                body += chunk;
-            });
-
-            req.on('end', () => {
-                var query = parse(body);
-                if (query) {
-                    if (self.API[iurl] && self.API[iurl].put) {
-                        self.API[iurl]["put"](query, res, req);
-                    } else {
-                        self.debug("Wrong API path");
-                        res.writeHead(400, { 'content-type': 'application/json' });
-                        res.end(`{"status": 400, "causes": ["missing/incorrect API path: post"]}`);
-                    }
-                } else {
-                    self.debug("No query");
-                    res.writeHead(400, { 'content-type': 'application/json' });
-                    res.end(`{"status": 400, "causes": ["missing query"]}`);
-                }
-            });
-        }
     })
 }
 
