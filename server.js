@@ -68,10 +68,6 @@ const serverListener = (req, res) => {
 			console.log("error");
 		});
 
-		res.pipe(proxy, {
-			end:true
-		});
-
 		res.on('error', (err) => {
 			res.writeHead(500, 'Internal Error');
 			res.end('500: An internal error occured and the server is unable to serve this request');
