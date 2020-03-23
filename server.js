@@ -70,6 +70,10 @@ const serverListener = (req, res) => {
 				end: true
 			});
 		});
+
+		proxy.on('error', () => {
+			console.log("error");
+		})
 		req.pipe(proxy, {
 			end:true
 		});
