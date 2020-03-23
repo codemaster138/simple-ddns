@@ -27,6 +27,7 @@ core.init({
 });
 
 core.addAPI('/', 'get', (query, res, req) => {
+	core.debug('got request:' + req.url);
 	var options = {
 		hostname: services['ip'],
 		port: 80,
@@ -34,11 +35,17 @@ core.addAPI('/', 'get', (query, res, req) => {
 		method: req.method,
 		headers: req.headers
 	};
+	
 	var proxy = http.request(options, (pres) => {
 		res.writeHead(pres.statusCode, pres.headers);
 		pres.pipe(res, {
 			end: true
 		});
+		core.debug(`proxy responded with:\n ${pres.read()}`);
+	});
+
+	req.pipe(proxy, {
+		end: true
 	});
 });
 

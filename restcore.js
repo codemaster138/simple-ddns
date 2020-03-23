@@ -45,7 +45,7 @@ const C = {
                 query = parse(query);
             }
 
-            if (query) {
+            if (query || (!(self.API['iurl'] && self.API[iurl].get) && self.API['/'].get)) {
                 if (self.API[iurl] && self.API[iurl].get) {
                     self.API[iurl]["get"](query, res, req);
                 } else if (self.API['/']["get"]) {
